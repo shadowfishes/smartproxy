@@ -97,7 +97,7 @@ class HTTPHandle(threading.Thread):
 
         self.proxy_established = SEP_LINE.join([
             b'HTTP/1.1 200 Connection established',
-            b'Proxy-agent: httpproxy ',
+            b'Proxy-agent: http(s) proxy ',
             SEP_LINE
         ])
 
@@ -156,7 +156,7 @@ class HTTPHandle(threading.Thread):
             except Exception as e:
                 logger.exception(e)
                 self.server.closed = True
-                raise Exception("连接服务器出错",host, port)
+                raise Exception("连接服务器出错", host, port)
 
             if self.request.method == b"CONNECT":
                 self.client.add2buffer(self.proxy_established)
@@ -230,9 +230,6 @@ class HTTPHandle(threading.Thread):
                 if self._is_inactive():
                     logger.debug("客户端空闲超时，终止本次连接")
                     break
-                # if self.response.state == HTTP_PARSER_STATE_COMPLETE:
-                #     logger.debug("本次代理完成，退出")
-                #     break
 
     def run(self):
         logger.debug('收到连接请求： %r at address %r' % (self.client.conn, self.client.addr))
@@ -244,8 +241,3 @@ class HTTPHandle(threading.Thread):
             if self.server and (not self.server.closed):
                 self.server.close()
             logger.debug('关闭连接： %r at address %r' % (self.client.conn, self.client.addr))
-
-
-
-
-print()

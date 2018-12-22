@@ -56,5 +56,5 @@ class Server:
         client = handler.Tcp2Client(conn, addr)
         proxy = handler.HTTPHandle(client)
         proxy.daemon = True
-        logger.debug('开始处理%r的请求' % client)
+        logger.debug('开始处理%r的请求' % addr)
         proxy.start()

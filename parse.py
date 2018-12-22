@@ -130,17 +130,8 @@ class RequestParse(Parser):
         req += SEP_LINE
         if self.body:
             req += self.body
-            # print(req)
         return req
 
-
-# class ResponseParse(Parser):
-#     def __init__(self):
-#         super(ResponseParse, self).__init__()
-#         self.code = None
-#         self.reason = None
-#
-#     def process(self, data):pass
 
 
 
