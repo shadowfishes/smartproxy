@@ -1,0 +1,17 @@
+APScheduler==3.5.3
+asn1crypto==0.24.0
+beautifulsoup4==4.6.3
+certifi==2018.10.15
+cffi==1.11.5
+chardet==3.0.4
+cryptography==2.4.2
+idna==2.7
+protobuf==3.6.1
+pycparser==2.19
+pymongo==3.7.2
+pytz==2018.7
+requests==2.20.1
+six==1.11.0
+threadpool==1.3.2
+tzlocal==1.5.1
+urllib3==1.24.1

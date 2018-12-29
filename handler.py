@@ -1,11 +1,11 @@
 # -*- coding:utf-8 -*-
+# HTTP请求响应处理脚本
 
 import select
 import datetime
 import threading
 import logging
 import socket
-import errno
 
 from parse import *
 
@@ -31,10 +31,7 @@ class BaseTcpConnect:
             logger.debug('从 %s 收到 %d 字节数据' % (self.conn_to, len(data)))
             return data
         except Exception as err:
-            if err.errno == errno.ECONNRESET:
-                logger.debug('%r' % err)
-            else:
-                logger.exception(
+            logger.exception(
                     '从%s接受数据时发生错误， 错误原因：%r' % (self.conn_to, err))
             return None
 
@@ -79,7 +76,7 @@ class Tcp2Server(BaseTcpConnect):
         self.addr = (host, int(port))
 
     def connect(self):
-        self.conn = socket.create_connection(self.addr)
+        self.conn = socket.create_connection(self.addr, timeout=2)
 
 
 class HTTPHandle(threading.Thread):

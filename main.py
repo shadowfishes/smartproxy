@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
+# 主程序
 
 import sys
 import os
@@ -45,6 +46,7 @@ def main():
     parser.add_argument("--host", default="127.0.0.1", help="设置代理服务器地址， 默认为127.0.0.1")
     parser.add_argument("--port", default=8899, type=int, help="设置代理服务器端口，默认为8899")
     parser.add_argument("--level", default="INFO", help="设置日志级别，默认为INFO")
+    parser.add_argument("--auto", default="False", help="设置是否使用上级代理功能，默认关闭")
     args = parser.parse_args()
     level_args = r"logging." + args.level.upper()
     logging.basicConfig(level=eval(level_args),
@@ -54,7 +56,7 @@ def main():
 
     if sys.version.startswith("3"):
         try:
-            myserver = server.Server(args.host, args.port)
+            myserver = server.Server(args.host, args.port, auto=args.auto)
             mklogdir()
             myserver.run()
         except KeyboardInterrupt:

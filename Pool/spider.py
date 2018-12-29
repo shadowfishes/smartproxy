@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+# 代理爬取脚本
 import random
 import logging
 import time
@@ -22,7 +23,7 @@ USRAGENT = ["Mozilla/5.0 (Windows NT 10.0; WOW64)", 'Mozilla/5.0 (Windows NT 6.3
             'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0 ', ]
 
 
-# 爬虫元类
+# 代理抓取爬虫元类
 class SpiderMeta(type):
     _spiders = []
 
@@ -30,8 +31,8 @@ class SpiderMeta(type):
         if "getter" not in args[2]:
             raise NotImplementedError("爬虫类{0}的getter方法未实现".format(args[0]))
 
-        # 为爬虫类添加获取页面表格方法
-        args[2]["get_page"] = lambda url: SpiderMeta.get_page(url)
+        # 为爬虫类添加默认（获取页面表格）方法
+        args[2].setdefault("get_page", lambda url: SpiderMeta.get_page(url))
 
         cls._spiders.append(type.__new__(cls, *args, **kwargs))
         return type.__new__(cls, *args, **kwargs)
@@ -44,6 +45,7 @@ class SpiderMeta(type):
     @staticmethod
     def get_page(url):
         # 随机选取agent，也可以不使用
+        # 爬虫类可以自定义get_page方法
         header = {"user-agent": random.choice(USRAGENT)}
         try:
             page = requests.get(url, headers=header)
@@ -54,7 +56,7 @@ class SpiderMeta(type):
         return trs
 
 
-# 自定义添加爬虫类，必须实现getter方法
+# 自定义添加爬虫类，必须实现getter方法, get_page方法可根据需要自定义。
 class XiciSpider(metaclass=SpiderMeta):
     url = "http://www.xicidaili.com/wt/"
 
@@ -71,7 +73,7 @@ class XiciSpider(metaclass=SpiderMeta):
                 ip = tds[1].text.strip()
                 port = tds[2].text.strip()
                 protocol = tds[5].text.strip()
-                yield (ip, port, protocol)
+                yield ip, port, protocol
             time.sleep(1)
 
 
@@ -90,7 +92,7 @@ class KuaiSpider(metaclass=SpiderMeta):
                 ip = tds[0].text.strip()
                 port = tds[1].text.strip()
                 protocol = tds[3].text.strip()
-                yield (ip, port, protocol)
+                yield ip, port, protocol
             time.sleep(1)
 
 
@@ -109,7 +111,7 @@ class Mianfei89(metaclass=SpiderMeta):
                 ip = tds[0].text.strip()
                 port = tds[1].text.strip()
                 protocol = "HTTP"
-                yield (ip, port, protocol)
+                yield ip, port, protocol
             time.sleep(1)
 
 
@@ -129,14 +131,12 @@ class Ip3366(metaclass=SpiderMeta):
                 ip = tds[0].text.strip()
                 port = tds[1].text.strip()
                 protocol = tds[3].text.strip()
-                yield (ip, port, protocol)
+                yield ip, port, protocol
             time.sleep(1)
 
 
 if __name__ == "__main__":
-    gen = SpiderMeta.get_proxy()
-    counts = 0
-    for proxy in gen:
-        counts += 1
+    # 使用示例
+    proxy_gen = SpiderMeta.get_proxy()
+    for proxy in proxy_gen:
         print(proxy)
-    print(counts)
