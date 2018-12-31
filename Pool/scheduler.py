@@ -71,12 +71,16 @@ class Scheduler:
         return datetime.datetime.strptime(timestr, "%Y-%m-%d %H:%M")
 
     def run(self):
-        self.db.connect()
-        self.get_proxy()
-        self.verify_proxy()
-        self.update_db()
-        self.delete_invalid_proxy()
-        self.db.close()
+        try:
+            self.db.connect()
+            self.get_proxy()
+            self.verify_proxy()
+            self.update_db()
+            self.delete_invalid_proxy()
+        except Exception:
+            pass
+        finally:
+            self.db.close()
 
 
 class AppendSched(Scheduler):
@@ -100,6 +104,8 @@ def schedule_task(db_name, collection_name, time_interval):
     scheduler = BlockingScheduler()
     scheduler.add_job(func=task_append.run, trigger='interval', minutes=task_append.time_interval, id='add')
     scheduler.add_job(func=task_verify.run, trigger='interval', minutes=task_verify.time_interval, id='verify')
+    # scheduler.add_job(func=task_append.run, trigger='interval', minutes=3, id='add')
+    # scheduler.add_job(func=task_verify.run, trigger='interval', minutes=2, id='verify')
     scheduler.add_listener(my_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
     scheduler.start()
 
