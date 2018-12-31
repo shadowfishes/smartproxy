@@ -24,5 +24,5 @@ optional arguments:
 使用：  
 python main.py --host 0.0.0.0 --auto True  
 当参数auto指定为True时，需要本机安装mongo等环境，第三方依赖库请查阅requirements；  
-当参数使用默认值时，无需安装第三方库。  
+当参数auto使用默认值时，无需安装第三方库。  
 
