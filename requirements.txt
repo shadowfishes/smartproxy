@@ -14,4 +14,4 @@ requests==2.20.1
 six==1.11.0
 threadpool==1.3.2
 tzlocal==1.5.1
-urllib3==1.24.1
+
