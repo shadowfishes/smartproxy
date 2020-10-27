@@ -4,7 +4,7 @@ beautifulsoup4==4.6.3
 certifi==2018.10.15
 cffi==1.11.5
 chardet==3.0.4
-cryptography==2.4.2
+cryptography==3.2
 idna==2.7
 protobuf==3.6.1
 pycparser==2.19
